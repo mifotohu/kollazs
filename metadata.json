@@ -1,0 +1,5 @@
+{
+  "name": "Kreatív Kollázskészítő",
+  "description": "Egy kliensoldali kollázskészítő alkalmazás, amely lehetővé teszi a felhasználók számára, hogy feltöltött képekből kreatív kollázsokat hozzanak létre, különféle elrendezések és beállítások segítségével. Az alkalmazás teljes mértékben a böngészőben fut, szerveroldali feldolgozás nélkül.",
+  "requestFramePermissions": []
+}
