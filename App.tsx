@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { toPng, toJpeg } from 'html-to-image';
 import ImageManager from './components/ImageManager';
@@ -40,16 +39,12 @@ function App() {
     }
     const node = canvasRef.current;
     
-    // Calculate aspect ratio from the node itself if it's 'free'
-    const nodeAspectRatio = node.clientWidth / node.clientHeight;
-    let finalAspectRatio = nodeAspectRatio;
-    if (aspectRatio !== 'free') {
-      const [w, h] = aspectRatio.split(':').map(Number);
-      finalAspectRatio = w / h;
-    }
+    // Calculate aspect ratio from the currently selected aspect ratio
+    const [w, h] = aspectRatio.split(':').map(Number);
+    const finalAspectRatio = w / h;
 
     if (isNaN(finalAspectRatio) || finalAspectRatio <= 0) {
-      alert("A kollázs mérete érvénytelen a letöltéshez.");
+      alert("A kiválasztott képarány érvénytelen a letöltéshez.");
       return;
     }
 
@@ -71,20 +66,40 @@ function App() {
         }
         break;
       case 'a4':
-        const a4Width = 2480;
-        const a4Height = 3508;
-        if (finalAspectRatio > (a4Width / a4Height)) {
+        const a4Width = 2480; // A4 width at 300 DPI (approx 8.27 inches * 300 dpi)
+        const a4Height = 3508; // A4 height at 300 DPI (approx 11.69 inches * 300 dpi)
+        // Adjust A4 dimensions based on selected collage aspect ratio
+        if (finalAspectRatio > (a4Width / a4Height)) { // Collage is wider than A4
           targetWidth = a4Width;
           targetHeight = a4Width / finalAspectRatio;
-        } else {
+        } else { // Collage is taller or square than A4
           targetHeight = a4Height;
           targetWidth = a4Height * finalAspectRatio;
         }
         break;
       case 'custom':
-        targetWidth = customWidth;
-        targetHeight = customHeight;
+        // Use customWidth and customHeight as a target, but enforce the selected aspectRatio.
+        // If custom dimensions don't match the aspect ratio, one will be adjusted.
+        const requestedCustomWidth = customWidth;
+        const requestedCustomHeight = customHeight;
+
+        const customRatio = requestedCustomWidth / requestedCustomHeight;
+
+        if (customRatio > finalAspectRatio) {
+            // Requested custom is wider than the selected aspect ratio, so cap by height
+            targetHeight = requestedCustomHeight;
+            targetWidth = Math.round(requestedCustomHeight * finalAspectRatio);
+        } else {
+            // Requested custom is taller or matches the selected aspect ratio, so cap by width
+            targetWidth = requestedCustomWidth;
+            targetHeight = Math.round(requestedCustomWidth / finalAspectRatio);
+        }
         break;
+      default:
+        // Fallback or error for unhandled outputResolution, though all should be covered
+        console.error("Unhandled output resolution:", outputResolution);
+        alert("Ismeretlen kimeneti felbontás.");
+        return;
     }
 
     targetWidth = Math.round(targetWidth);

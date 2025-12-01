@@ -1,4 +1,3 @@
-
 import { CollageLayout, AspectRatio, ExportFormat, OutputResolution } from './types';
 
 export const MAX_IMAGES = 10;
@@ -8,7 +7,7 @@ export const DEFAULT_LAYOUT: CollageLayout = 'grid';
 export const DEFAULT_BACKGROUND_COLOR = '#ffffff';
 export const DEFAULT_SPACING = 10;
 export const DEFAULT_CORNER_RADIUS = 0;
-export const DEFAULT_ASPECT_RATIO: AspectRatio = 'free';
+export const DEFAULT_ASPECT_RATIO: AspectRatio = '1:1'; // Changed from 'free'
 export const DEFAULT_EXPORT_FORMAT: ExportFormat = 'png';
 export const DEFAULT_JPG_QUALITY = 0.95;
 export const DEFAULT_OUTPUT_RESOLUTION: OutputResolution = '4096px';
@@ -41,7 +40,6 @@ export const LAYOUT_OPTIONS: { label: string; options: { value: CollageLayout; l
 ];
 
 export const ASPECT_RATIO_OPTIONS: { value: AspectRatio, label: string }[] = [
-    { value: 'free', label: 'Szabad' },
     { value: '1:1', label: '1:1 (Négyzet)' },
     { value: '4:3', label: '4:3 (Fekvő)' },
     { value: '16:9', label: '16:9 (Szélesvásznú)' },

@@ -60,20 +60,6 @@ const CollageCanvas: React.FC<CollageCanvasProps> = ({
       return { canvasStyle: {}, layoutWidth: 0, layoutHeight: 0 };
     }
 
-    if (aspectRatio === 'free') {
-      const style: React.CSSProperties = {
-        width: '100%',
-        height: '100%',
-        border: '4px solid #d1d5db',
-        boxSizing: 'border-box',
-      };
-      return {
-        canvasStyle: style,
-        layoutWidth: containerSize.width - 8,
-        layoutHeight: containerSize.height - 8,
-      };
-    }
-
     const [ratioW, ratioH] = aspectRatio.split(':').map(Number);
     const targetRatio = ratioW / ratioH;
     const containerRatio = containerSize.width / containerSize.height;
@@ -116,7 +102,7 @@ const CollageCanvas: React.FC<CollageCanvasProps> = ({
     
     // Only respond to left click or single touch
     if ((e as React.MouseEvent).buttons === 1 || e.type === 'touchstart') { 
-        onImageClick(index); // Set this image as active
+        onImageClick(index); // Always set this image as active when clicked/touched
         setIsDragging(true);
         activeDragImageRef.current = index;
 
@@ -245,7 +231,7 @@ const CollageCanvas: React.FC<CollageCanvasProps> = ({
               onMouseDown={(e) => handleMouseDown(e, index)}
               onTouchStart={(e) => handleMouseDown(e, index)}
               onWheel={(e) => handleWheel(e, index)}
-              onClick={() => onImageClick(index)} // Still handle click for activation
+              // The onClick is now handled by handleMouseDown to ensure activation for drag/zoom
               className="absolute overflow-hidden"
               style={{
                 left: effectiveX,
@@ -254,9 +240,9 @@ const CollageCanvas: React.FC<CollageCanvasProps> = ({
                 height: effectiveHeight,
                 borderRadius: `${cornerRadius}px`,
                 cursor: (index === activeImageIndex && isDragging) ? 'grabbing' : (index === activeImageIndex ? 'grab' : 'pointer'),
-                border: index === activeImageIndex ? '3px solid #3b82f6' : 'none',
+                outline: index === activeImageIndex ? '3px solid #3b82f6' : 'none', // Use outline for active state
                 boxSizing: 'border-box',
-                transition: 'all 0.3s ease', // Apply transition to the cell for smooth movement/resizing
+                // Removed `transition: 'all 0.3s ease'` for direct interaction feedback
                 transform: `rotate(${combinedRotation}deg)`, // Apply combined rotation to the cell
                 boxShadow: layout === 'polaroid' ? '3px 3px 8px rgba(0,0,0,0.2)' : 'none',
                 backgroundColor: layout === 'polaroid' ? '#fff' : 'transparent',

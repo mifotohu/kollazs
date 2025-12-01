@@ -1,4 +1,3 @@
-
 export interface UploadedImage {
   id: string;
   file: File;
@@ -22,7 +21,7 @@ export const layouts = [
 ] as const;
 export type CollageLayout = typeof layouts[number];
 
-export const aspectRatios = ['free', '1:1', '4:3', '16:9', '3:4', '9:16'] as const;
+export const aspectRatios = ['1:1', '4:3', '16:9', '3:4', '9:16'] as const;
 export type AspectRatio = typeof aspectRatios[number];
 
 export const exportFormats = ['png', 'jpeg'] as const;
